@@ -2,21 +2,40 @@
 常见前端面试问题、、、、、、
 
 
-     JavaScript
+>JavaScript
 
-    原型
+###原型
 
     我们创建的每一个函数，都可以有一个prototype属性，该属性指向一个对象。这个对象，就是原型。
 
 	当我们在创建对象时，可以根据自己的需求，选择性的将一些属性和方法通过prototype属性，挂载在原型对象上。而每一个new出来的实例，
 	都有一个proto属性，该属性指向构造函数的原型对象，通过这个属性，让实例对象也能够访问原型对象上的方法。因此，
 	当所有的实例都能够通过proto访问到原型对象时，原型对象的方法与属性就变成了共有方法与属性。
+   ```
 
+// 声明构造函数
+function Person(name, age) {
+	this.name = name;
+	this.age = age;
+}
+ 
+// 通过prototye属性，将方法挂载到原型对象上
+Person.prototype.getName = function() {
+	return this.name;
+}
+ 
+var p1 = new Person('tim', 10);
+var p2 = new Person('jak', 22);
+console.log(p1.getName === p2.getName); // true
+
+<img src="599584-2fc7dad23d112791.png" alt=""> 
+
+   ```
 
 
 	通过图示我们可以看出，构造函数的prototype与所有实例对象的proto都指向原型对象。而原型对象的constructor指向构造函数。
 
-	原型链
+###原型链
 	根据《JavaScript高级程序设计》P162页可以作出回答：原型链是实现继承的主要方法。其基本思想是：
 	利用原型让一个引用类型继承另一个应用类型的属性和方法。
         简单回顾一下构造函数、原型和实例的关系：每个构造函数都有一个原型对象，
@@ -83,27 +102,89 @@
 	继承
 
 	1、简单原型链继承
+	```
+function Super(){
+	this.name = 'hzzly';
+}
+function Sub(){
+	// ...
+}
+Sub.prototype = new Super();    // 核心
+
+	```
 
 	缺点：修改sub1.name后sub2.name也变了，因为来自原型对象的引用属性是所有实例共享的。
 
 	2、构造函数式继承
+```
 
+function Super(val){
+	this.val = val;
+	this.fun = function(){  // 实例函数
+		// ...
+	}
+}
+function Sub(val){
+	Super.call(this, val);   // 核心
+	// ...
+}
+
+```
 
 
 	缺点：无法实现函数复用，每个子类实例都持有一个新的fun函数，太多了就会影响性能，内存爆炸。。
 
 	3、组合式继承
+```
 
+function Super(){
+	this.name = 'hzzly';
+}
+// 原型函数
+Super.prototype.fun1 = function(){};
+Super.prototype.fun2 = function(){};
+//Super.prototype.fun3...
+function Sub(){
+	Super.call(this);   // 核心
+	// ...
+}
+Sub.prototype = new Super();    // 核心
+
+```
 
 
 	缺点：子类原型上有一份多余的父类实例属性，因为父类构造函数被调用了两次，
 	生成了两份，而子类实例上的那一份屏蔽了子类原型上父类的。。。又是内存浪费。
 
 	4、寄生组合式继承
+	```
+function Super(){
+	this.name = 'hzzly';
+}
+Super.prototype.fun1 = function(){};
+Super.prototype.fun2 = function(){};
+//Super.prototype.fun3...
+function Sub(){
+	Super.call(this);   // 核心
+	// ...
+}
+Sub.prototype=Object.create(Super.prototype)   // 核心
+Sub.prototype.constructor=Sub   // 核心
+
+	```
 
 
 
 	5、es6的class继承方式
+	```
+class A {
+}
+class B extends A {
+}
+B.__proto__ === A   // true
+B.prototype.__proto__ === A.prototype   // true
+
+	```
 
 	es6引入了class、extends、super、static(部分为ES2016标准)
 
