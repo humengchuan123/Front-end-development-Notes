@@ -4,15 +4,16 @@
 
 >JavaScript
 
-###原型
+    ###原型
 
     我们创建的每一个函数，都可以有一个prototype属性，该属性指向一个对象。这个对象，就是原型。
 
 	当我们在创建对象时，可以根据自己的需求，选择性的将一些属性和方法通过prototype属性，挂载在原型对象上。而每一个new出来的实例，
 	都有一个proto属性，该属性指向构造函数的原型对象，通过这个属性，让实例对象也能够访问原型对象上的方法。因此，
 	当所有的实例都能够通过proto访问到原型对象时，原型对象的方法与属性就变成了共有方法与属性。
-   ```
+   
 
+```
 // 声明构造函数
 function Person(name, age) {
 	this.name = name;
@@ -26,16 +27,15 @@ Person.prototype.getName = function() {
  
 var p1 = new Person('tim', 10);
 var p2 = new Person('jak', 22);
-console.log(p1.getName === p2.getName); // true
-
-<img src="599584-2fc7dad23d112791.png" alt=""> 
-
-   ```
+console.log(p1.getName === p2.getName); // true 
+```
+<img src="599584-2fc7dad23d112791.png" alt="">
 
 
 	通过图示我们可以看出，构造函数的prototype与所有实例对象的proto都指向原型对象。而原型对象的constructor指向构造函数。
 
-###原型链
+    ###原型链
+
 	根据《JavaScript高级程序设计》P162页可以作出回答：原型链是实现继承的主要方法。其基本思想是：
 	利用原型让一个引用类型继承另一个应用类型的属性和方法。
         简单回顾一下构造函数、原型和实例的关系：每个构造函数都有一个原型对象，
